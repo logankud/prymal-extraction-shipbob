@@ -6,7 +6,7 @@ on:
       - '**/create_table/shipbob_inventory/**'
 
 jobs:
-  create_shopify_qty_sold_by_sku_daily:
+  create_shipbob_inventory:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repo code
