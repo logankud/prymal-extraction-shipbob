@@ -14,7 +14,7 @@ import time
 # -------------------------------------
 
 REGION = 'us-east-1'
-DATABASE = 'prymal-ops'
+DATABASE = 'prymal'
 CRAWLER_NAME = 'shipbob_inventory'
 
 
@@ -240,14 +240,23 @@ def run_athena_query(query:str, database: str):
         )
 
         query_execution_id = response['QueryExecutionId']
-        logger.info(f"Query submitted. Execution ID: {query_execution_id}")
 
-        # Optionally, you can wait for the query to complete and check the results
-        athena_client.get_waiter('query_execution_completed').wait(
-            QueryExecutionId=query_execution_id
-        )
+        # Wait for the query to complete
+        state = 'RUNNING'
 
-        logger.info("Query execution completed successfully.")
+        while (state in ['RUNNING', 'QUEUED']):
+            response = athena_client.get_query_execution(QueryExecutionId = query_execution_id)
+            logger.info(f'Query is in {state} state..')
+            if 'QueryExecution' in response and 'Status' in response['QueryExecution'] and 'State' in response['QueryExecution']['Status']:
+                # Get currentstate
+                state = response['QueryExecution']['Status']['State']
+
+                if state == 'FAILED':
+                    logger.error('Query Failed!')
+                elif state == 'SUCCEEDED':
+                    logger.info('Query Succeeded!')
+
+                    
     except ParamValidationError as e:
         logger.error(f"Validation Error (potential SQL query issue): {e}")
         # Handle invalid parameters in the request, such as an invalid SQL query
