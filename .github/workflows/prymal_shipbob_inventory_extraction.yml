@@ -33,11 +33,11 @@ jobs:
           S3_PRYMAL: ${{ secrets.S3_PRYMAL }}
         run: python extraction/shipbob_inventory/shipbob_inventory.py 
 
-      # - name: Run Shopify Glue Crawlers
-      #   env: 
-      #     AWS_ACCESS_KEY:  ${{ secrets.AWS_ACCESS_KEY }}
-      #     AWS_ACCESS_SECRET: ${{ secrets.AWS_ACCESS_SECRET }}
-      #   run: python prymal/data_pipelines/shopify/order_data/shopify_crawlers.py 
+      - name: Run Shopify Glue Crawlers
+        env: 
+          AWS_ACCESS_KEY:  ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_ACCESS_SECRET: ${{ secrets.AWS_ACCESS_SECRET }}
+        run: python crawlers/shipbob_inventory/shipbob_inventory_crawler.py 
         
 
       - run: echo "Job status - ${{ job.status }}."
