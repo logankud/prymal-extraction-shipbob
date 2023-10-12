@@ -161,7 +161,7 @@ logger.info(f'Current time: {current_time}')
 
 # Log number of rows
 logger.info(f'{len(current_inventory_df)} rows in current_inventory_df')
-
+ 
 
 # Configure S3 Prefix
 S3_PREFIX_PATH = f"shipbob/shipbob_inventory/partition_date={current_date}/shipbob_inventory_{current_date}.csv"
