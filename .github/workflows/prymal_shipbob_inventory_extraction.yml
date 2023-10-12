@@ -30,6 +30,7 @@ jobs:
           SHIPBOB_API_SECRET: ${{ secrets.SHIPBOB_API_SECRET }}
           AWS_ACCESS_KEY:  ${{ secrets.AWS_ACCESS_KEY }}
           AWS_ACCESS_SECRET: ${{ secrets.AWS_ACCESS_SECRET }}
+          S3_PRYMAL: ${{ secrets.S3_PRYMAL }}
         run: python extraction/shipbob_inventory/shipbob_inventory.py 
 
       # - name: Run Shopify Glue Crawlers
