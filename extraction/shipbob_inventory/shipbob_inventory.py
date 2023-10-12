@@ -159,6 +159,7 @@ BUCKET = os.environ['S3_PRYMAL']
 current_time = datetime.datetime.now()
 logger.info(f'Current time: {current_time}')
 
+# Log number of rows
 logger.info(f'{len(current_inventory_df)} rows in current_inventory_df')
 
 
