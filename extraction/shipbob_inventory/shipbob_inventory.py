@@ -133,6 +133,11 @@ inventory_details_df = inventory_df[['id', 'reference_id','bundle_root_informati
 # Format date
 inventory_details_df['created_date'] = pd.to_datetime(inventory_details_df['created_date']).dt.strftime('%Y-%m-%d')
 
+# Remove delimeter's / special characters
+inventory_details_df['name'] = inventory_details_df['name'].apply(lambda x: x.replace("'", ""))
+inventory_details_df['name'] = inventory_details_df['name'].apply(lambda x: x.replace(",", ""))
+
+
 
 # Get current data
 current_date = pd.to_datetime('today').strftime('%Y-%m-%d')
