@@ -182,7 +182,7 @@ logger.info(f'Writing to {S3_PREFIX_PATH}')
 
 
 with io.StringIO() as csv_buffer:
-    inventory_df.to_csv(csv_buffer, index=False)
+    inventory_details_df.to_csv(csv_buffer, index=False)
 
     response = s3_client.put_object(
         Bucket=BUCKET, 
