@@ -23,7 +23,6 @@ start_time = datetime.datetime.now()
 logger.info(f'Start time: {start_time}')
 
 SHIPBOB_API_SECRET = os.environ['SHIPBOB_API_SECRET']
-
 # -------------------------------------
 # Functions
 # -------------------------------------
@@ -89,7 +88,7 @@ def delete_s3_prefix_data(bucket:str, s3_prefix:str):
 
 def get_current_inventory(api_secret:str):
     """
-    GET current inventory from Shipbob
+    GET current inventory details from Shipbob
 
     Parameters
     ----------
@@ -99,11 +98,11 @@ def get_current_inventory(api_secret:str):
     Returns
     -------
     pd.DataFrame
-        Dataframe containing all SKUs and their current inventory levels per ShipBob
+        Dataframe containing all SKUs and their information (including current inventory levels) per ShipBob
     """
 
 
-    url = 'https://api.shipbob.com/1.0/inventory'
+    url = 'https://api.shipbob.com/1.0/product'
 
     # Set up the request headers with the Bearer token
     headers = {
@@ -124,13 +123,6 @@ def get_current_inventory(api_secret:str):
 # Extract current inventory from Shipbob API
 inventory_df = get_current_inventory(api_secret=SHIPBOB_API_SECRET)
 
-
-# Subset columns
-current_inventory_df = inventory_df[['id','name','total_fulfillable_quantity', 'total_onhand_quantity',
-       'total_committed_quantity', 'total_sellable_quantity',
-       'total_awaiting_quantity', 'total_exception_quantity',
-       'total_internal_transfer_quantity', 'total_backordered_quantity',
-       'is_active']].copy()
 
 # Get current data
 current_date = pd.to_datetime('today').strftime('%Y-%m-%d')
@@ -160,7 +152,7 @@ current_time = datetime.datetime.now()
 logger.info(f'Current time: {current_time}')
 
 # Log number of rows
-logger.info(f'{len(current_inventory_df)} rows in current_inventory_df')
+logger.info(f'{len(inventory_df)} rows in current_inventory_df')
  
 
 # Configure S3 Prefix
@@ -180,7 +172,7 @@ logger.info(f'Writing to {S3_PREFIX_PATH}')
 
 
 with io.StringIO() as csv_buffer:
-    current_inventory_df.to_csv(csv_buffer, index=False)
+    inventory_df.to_csv(csv_buffer, index=False)
 
     response = s3_client.put_object(
         Bucket=BUCKET, 
