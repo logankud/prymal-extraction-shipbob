@@ -124,6 +124,16 @@ def get_current_inventory(api_secret:str):
 inventory_df = get_current_inventory(api_secret=SHIPBOB_API_SECRET)
 
 
+# Subset columns
+inventory_details_df = inventory_df[['id', 'reference_id','bundle_root_information','created_date', 'sku',
+       'name', 'barcode', 'gtin', 'upc', 'unit_price',
+       'total_fulfillable_quantity', 'total_onhand_quantity',
+       'total_committed_quantity']].copy()
+
+# Format date
+inventory_details_df['created_date'] = pd.to_datetime(inventory_details_df['created_date']).dt.strftime('%Y-%m-%d')
+
+
 # Get current data
 current_date = pd.to_datetime('today').strftime('%Y-%m-%d')
 
