@@ -158,7 +158,7 @@ inventory_details_df = inventory_df[['id', 'reference_id','bundle_root_informati
        'total_committed_quantity']].copy() 
 
 # Format date
-inventory_details_df['created_date'] = pd.to_datetime(inventory_details_df['created_date']).dt.strftime('%Y-%m-%d')
+inventory_details_df['created_date'] = pd.to_datetime(inventory_details_df['created_date'], format='ISO8601').dt.strftime('%Y-%m-%d')
 
 # Remove delimeter's / special characters
 inventory_details_df['name'] = inventory_details_df['name'].apply(lambda x: x.replace("'", ""))
