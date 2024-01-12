@@ -86,9 +86,10 @@ def delete_s3_prefix_data(bucket:str, s3_prefix:str):
       logger.info("No objects to delete")
 
 
+
 def get_current_inventory(api_secret:str):
     """
-    GET current inventory details from Shipbob
+    GET details (ie. sku) for current inventory in Shipbob
 
     Parameters
     ----------
@@ -98,11 +99,11 @@ def get_current_inventory(api_secret:str):
     Returns
     -------
     pd.DataFrame
-        Dataframe containing all SKUs and their information (including current inventory levels) per ShipBob
+        Dataframe containing all SKUs and their current inventory levels per ShipBob
     """
 
-
-    url = 'https://api.shipbob.com/1.0/product'
+    url = 'https://api.shipbob.com'
+    url_params = '/1.0/product'
 
     # Set up the request headers with the Bearer token
     headers = {
@@ -110,13 +111,39 @@ def get_current_inventory(api_secret:str):
         }
 
     # Send the GET request
-    response = requests.get(url, headers=headers)
+    response = requests.get(url+url_params, headers=headers)
 
+    # convert to json
     response_json = json.loads(response.text)
 
-    response_df = pd.json_normalize(response_json)
+    # normalize to df
+    results_df = pd.json_normalize(response_json)
+
+    # Extract page details
+    current_page = response.headers['Page-Number']
+    total_pages = response.headers['Total-Pages']
+
+    while 'Next-Page' in response.headers and int(current_page) <= int(total_pages):
+
+        url_params = response.headers['Next-Page']
+
+        # Send the GET request
+        response = requests.get(url+url_params, headers=headers)
+
+        # convert to json
+        response_json = json.loads(response.text)
+
+        # normalize to df
+        response_df = pd.json_normalize(response_json)
+
+        # Extract page details
+        current_page = response.headers['Page-Number']
+
+        # Append results
+        results_df = pd.concat([results_df,response_df])
 
     return response_df
+
 
 # --------------------------------------------------------------------------------------
 
