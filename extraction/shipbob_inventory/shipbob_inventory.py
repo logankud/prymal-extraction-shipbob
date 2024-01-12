@@ -142,7 +142,7 @@ def get_current_inventory(api_secret:str):
         # Append results
         results_df = pd.concat([results_df,response_df])
 
-    return response_df
+    return results_df
 
 
 # --------------------------------------------------------------------------------------
