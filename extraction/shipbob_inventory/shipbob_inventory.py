@@ -173,7 +173,7 @@ current_date = pd.to_datetime('today').strftime('%Y-%m-%d')
 # CONFIGURE BOTO  =======================================
 
 
-
+ 
 AWS_ACCESS_KEY_ID=os.environ['AWS_ACCESS_KEY']
 AWS_SECRET_ACCESS_KEY=os.environ['AWS_ACCESS_SECRET']
 

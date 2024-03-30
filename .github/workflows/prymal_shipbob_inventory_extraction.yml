@@ -1,6 +1,7 @@
 name: Prymal Shipbob Inventory Extraction
 run-name: ${{ github.actor }} - Shipbob Inventory Extraction 
 on: 
+  workflow_dispatch:
   push:
     paths:
       - '**/extraction/shipbob_inventory**'
